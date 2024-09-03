@@ -7,10 +7,10 @@ export default function Home() {
       {flats.map((flat) => (
         <div
           className={
-            "flex justify-between px-4 py-2 text-gray-900 items-stretch tracking-wide font-bold text-lg border-gray-900 mx-2 rounded-md" +
+            "flex bg-gradient-to-b justify-between px-4 py-2 text-gray-900 items-stretch tracking-wide font-bold text-lg border-gray-900 mx-2 rounded-md" +
             (flat.id > 3
-              ? " bg-gradient-to-b from-green-300 to-green-200"
-              : " bg-gradient-to-b from-red-300 to-red-200")
+              ? " from-green-300 to-green-200"
+              : " from-red-300 to-red-200")
           }
           key={flat.id}
         >
