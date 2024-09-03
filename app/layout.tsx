@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { IoSettingsSharp } from "react-icons/io5";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["cyrillic"] });
 
 export const metadata: Metadata = {
   title: "Рента - мониторинг квартир",
@@ -22,6 +23,9 @@ export default function RootLayout({
           <header className="flex items-center shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
             <Link href="/">
               <h1 className="text-2xl font-bold">Квартиры</h1>
+            </Link>
+            <Link href="settings">
+              <IoSettingsSharp size="30px" />
             </Link>
           </header>
           <div>{children}</div>

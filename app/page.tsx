@@ -19,7 +19,7 @@ export default function Home() {
             <div className="text-base font-normal">
               {flat.id > 3 ? (
                 <>
-                  <p>Живут: Новолекс</p>
+                  <p>Занята: Новолекс</p>
                   <p>До: 5 Сентября 2024</p>
                 </>
               ) : (
