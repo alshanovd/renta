@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className + " bg-white"}>
-        <div className="grid grid-rows-[auto_1fr_auto] gap-3 bg-gray-100">
+        <div className="grid grid-rows-[auto_1fr_auto] gap-3 bg-gray-100 min-h-screen">
           <header className="flex items-center shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
             <Link href="/">
               <h1 className="text-2xl font-bold">Квартиры</h1>
