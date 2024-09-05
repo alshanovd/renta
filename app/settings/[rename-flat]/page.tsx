@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/components/button";
 import { Flat } from "@prisma/client";
 import { useState } from "react";
