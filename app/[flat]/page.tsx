@@ -1,4 +1,5 @@
 "use client";
+import Button from "@/components/button";
 import { Booking } from "@/models/flat";
 import { addDay, format } from "@formkit/tempo";
 import { useParams } from "next/navigation";
@@ -15,12 +16,7 @@ export default function FlatPage() {
     <div className="mt-4">
       {!showForm && (
         <div className="flex justify-center">
-          <button
-            onClick={() => setShowForm(true)}
-            className="text-slate-800 border border-slate-700 bg-gradient-to-b from-slate-100 to-slate-300 py-2 px-4 rounded-md shadow-md active:shadow-inner"
-          >
-            Новая бронь
-          </button>
+          <Button onClick={() => setShowForm(true)}>Новая бронь</Button>
         </div>
       )}
       {showForm && (
