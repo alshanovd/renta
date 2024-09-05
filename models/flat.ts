@@ -4,7 +4,7 @@ export interface Flat {
 }
 
 export interface Booking {
-    id?: number;
+    id: number;
     flatId: number;
     date: Date;
     duration: number;

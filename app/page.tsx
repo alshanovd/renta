@@ -1,9 +1,12 @@
 import { flats } from "@/mock";
+import prisma from "@/prisma/prisma";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const dbFlats = await prisma.flat.findMany();
   return (
     <div className="bg-gray-100 grid gap-3">
+      <div className="text-black">{JSON.stringify(dbFlats)}</div>
       {flats.map((flat) => (
         <div
           className={

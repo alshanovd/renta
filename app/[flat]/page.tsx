@@ -63,7 +63,6 @@ export default function FlatPage() {
               id="date"
               value={format(new Date(), "YYYY-MM-DD")}
             />
-            {/* <p>От: {format(new Date(), "medium", "ru")}</p> */}
             <p>
               До:{" "}
               {format(addDay(new Date(), newBooking?.duration), "medium", "ru")}
