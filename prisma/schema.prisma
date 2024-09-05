@@ -17,6 +17,7 @@ model Booking {
   flat      Flat     @relation(fields: [flatId], references: [id])
   flatId    Int      @map(name: "flat_id")
   duration  Int
+  movedInAt DateTime @map(name: "moved_in_at")
 }
 
 model Flat {
