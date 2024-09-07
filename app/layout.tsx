@@ -22,8 +22,10 @@ export default async function RootLayout({
     include: {
       bookings: {
         orderBy: { movedInAt: "desc" },
+        take: 10,
       },
     },
+    orderBy: { id: "desc" },
   });
   return (
     <html lang="en">
