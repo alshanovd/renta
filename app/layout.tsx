@@ -1,8 +1,10 @@
+import FlatsProvider from "@/components/flats-context";
+import prisma from "@/prisma/prisma";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import Link from "next/link";
 import { IoSettingsSharp } from "react-icons/io5";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["cyrillic"] });
 
@@ -11,11 +13,18 @@ export const metadata: Metadata = {
   description: "Приложение для отслеживания состояния квартир в п. Новая Чара",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const flats = await prisma.flat.findMany({
+    include: {
+      bookings: {
+        orderBy: { movedInAt: "desc" },
+      },
+    },
+  });
   return (
     <html lang="en">
       <body className={inter.className + " bg-white"}>
@@ -28,7 +37,9 @@ export default function RootLayout({
               <IoSettingsSharp size="30px" />
             </Link>
           </header>
-          <div>{children}</div>
+          <FlatsProvider props={{ flats }}>
+            <div>{children}</div>
+          </FlatsProvider>
           <footer className="bg-slate-700 text-slate-200">footer</footer>
         </div>
       </body>
