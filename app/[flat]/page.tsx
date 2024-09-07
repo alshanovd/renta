@@ -11,6 +11,7 @@ export default function FlatPage() {
   const [newBooking, setNewBooking] = useState<Partial<Booking>>({
     duration: 0,
     flatId: Number(params.flat),
+    date: new Date(),
   });
   return (
     <div className="mt-4">
@@ -57,11 +58,21 @@ export default function FlatPage() {
               type="date"
               name="date"
               id="date"
-              value={format(new Date(), "YYYY-MM-DD")}
+              onChange={(event) =>
+                setNewBooking((state) => ({
+                  ...state,
+                  date: new Date(event.target.value),
+                }))
+              }
+              value={format(newBooking.date!, "YYYY-MM-DD")}
             />
             <p>
               До:{" "}
-              {format(addDay(new Date(), newBooking?.duration), "medium", "ru")}
+              {format(
+                addDay(newBooking.date!, newBooking?.duration),
+                "medium",
+                "ru"
+              )}
             </p>
           </div>
           <div className="mt-2 flex justify-center">
