@@ -1,18 +1,10 @@
 "use client";
 import Button from "@/components/button";
-import { Booking } from "@/models/flat";
-import { addDay, format } from "@formkit/tempo";
-import { useParams } from "next/navigation";
 import { useState } from "react";
+import NewBookingForm from "./NewBookingForm";
 
 export default function FlatPage() {
-  const params = useParams();
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [newBooking, setNewBooking] = useState<Partial<Booking>>({
-    duration: 0,
-    flatId: Number(params.flat),
-    date: new Date(),
-  });
   return (
     <div className="mt-4">
       {!showForm && (
@@ -20,68 +12,7 @@ export default function FlatPage() {
           <Button onClick={() => setShowForm(true)}>Новая бронь</Button>
         </div>
       )}
-      {showForm && (
-        <div className="border-b pb-5 border-slate-800">
-          <h1 className="font-semibold text-center">Новая бронь</h1>
-          <div className="mt-2">
-            <label htmlFor="company" className="mr-2">
-              Кто заехал?
-            </label>
-            <input
-              id="company"
-              type="text"
-              className="py-1 px-2 border w-full"
-            />
-          </div>
-          <div className="mt-2">
-            <label htmlFor="days" className="mr-2">
-              На сколько дней?
-            </label>
-            <br />
-            <input
-              className="w-20 py-1 px-2 border"
-              onChange={(event) =>
-                setNewBooking((state) => ({
-                  ...state,
-                  duration: Number(event.target.value),
-                }))
-              }
-              id="days"
-              type="tel"
-              name="duration"
-            />
-          </div>
-          <div className="mt-2">
-            <label htmlFor="date">От: </label>
-            <input
-              className="py-1 px-2 border"
-              type="date"
-              name="date"
-              id="date"
-              onChange={(event) =>
-                setNewBooking((state) => ({
-                  ...state,
-                  date: new Date(event.target.value),
-                }))
-              }
-              value={format(newBooking.date!, "YYYY-MM-DD")}
-            />
-            <p>
-              До:{" "}
-              {format(
-                addDay(newBooking.date!, newBooking?.duration),
-                "medium",
-                "ru"
-              )}
-            </p>
-          </div>
-          <div className="mt-2 flex justify-center">
-            <button className="text-slate-800 border border-slate-700 bg-gradient-to-b from-slate-100 to-slate-300 py-2 px-4 rounded-md shadow-md active:shadow-inner">
-              Забронировать
-            </button>
-          </div>
-        </div>
-      )}
+      {showForm && <NewBookingForm setShowForm={setShowForm} />}
     </div>
   );
 }

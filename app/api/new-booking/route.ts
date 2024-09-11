@@ -2,7 +2,7 @@ import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { flatId, movedInAt, company, duration } = await req.json();
+  const { date, flatId, movedInAt, company, duration } = await req.json();
 
   let result;
   try {
