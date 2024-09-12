@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: "Приложение для отслеживания состояния квартир в п. Новая Чара",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
