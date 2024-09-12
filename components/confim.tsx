@@ -15,8 +15,8 @@ export default function Confirm({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 rounded-md shadow-md">
-        <div className="text-lg">{children}</div>
-        <div className="flex mt-4">
+        <div className="text-lg text-center">{children}</div>
+        <div className="flex justify-center mt-4">
           <Button onClick={onCancel}>Отмена</Button>
           <Button onClick={onConfirm} className="ml-4 to-red-300">
             {confirm}

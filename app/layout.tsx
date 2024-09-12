@@ -34,7 +34,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className + " bg-white"}>
         <div className="grid grid-rows-[1fr_auto] gap-3 bg-gray-100 min-h-screen pt-[75px]">
-          <header className="flex items-center fixed top-0 w-full shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
+          <header className="flex z-10 items-center fixed top-0 w-full shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
             <Link href="/">
               <h1 className="text-2xl font-bold">Квартиры</h1>
             </Link>
