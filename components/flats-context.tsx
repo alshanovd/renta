@@ -1,6 +1,6 @@
 "use client";
 import { Flat } from "@/models/flat";
-import { addDay, diffDays } from "@formkit/tempo";
+import moment from "moment";
 import { createContext } from "react";
 
 export const FlatsContext = createContext<Flat[]>([]);
@@ -16,8 +16,12 @@ export default function FlatsProvider({
     const booking1 = flat1.bookings[0] || {};
     const booking2 = flat2.bookings[0] || {};
     const result =
-      Number(addDay(booking1.movedInAt, booking1.duration || 0)) -
-      Number(addDay(booking2.movedInAt, booking2.duration || 0));
+      Number(
+        moment(booking1.movedInAt).add(booking1.duration, "days").format("X")
+      ) -
+      Number(
+        moment(booking2.movedInAt).add(booking2.duration, "days").format("X")
+      );
     return result;
   });
   return (

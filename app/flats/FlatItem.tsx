@@ -1,5 +1,5 @@
 import { Flat } from "@/models/flat";
-import { addDay } from "@formkit/tempo";
+import moment from "moment";
 import FlatButton from "./FlatButton";
 import FlatStatus from "./FlatStatus";
 
@@ -7,7 +7,9 @@ export default function FlatItem({ flat }: { flat: Flat }) {
   const lastBooking = flat.bookings[0];
   let busy = false;
   if (lastBooking) {
-    busy = addDay(lastBooking.movedInAt, lastBooking.duration) > new Date();
+    busy =
+      moment(lastBooking.movedInAt).add(lastBooking.duration, "days") >
+      moment();
   }
   const color = busy
     ? " from-green-300 to-green-200"

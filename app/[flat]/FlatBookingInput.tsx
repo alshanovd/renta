@@ -9,7 +9,7 @@ export default function FlatBookingInput({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
   type: string;
-  value?: string;
+  value?: string | number;
   label?: string;
   disabled?: boolean;
 }) {

@@ -1,9 +1,13 @@
 import Button from "@/components/button";
-import { addDay, format } from "@formkit/tempo";
 import { Booking } from "@prisma/client";
+import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FlatBookingInput from "./FlatBookingInput";
+
+interface BookingExtended extends Booking {
+  moveOutAt: Date;
+}
 
 export default function NewBookingForm({
   setShowForm,
@@ -12,14 +16,15 @@ export default function NewBookingForm({
 }) {
   const router = useRouter();
   const params = useParams();
-  const [disabled, setDisabled] = useState<boolean>(false);
-  const [newBooking, setNewBooking] = useState<Partial<Booking>>({
+  const [newBooking, setNewBooking] = useState<Partial<BookingExtended>>({
     duration: 0,
     flatId: Number(params.flat),
-    movedInAt: new Date(),
+    movedInAt: moment(new Date()).startOf("day").toDate(),
     company: "",
+    moveOutAt: moment(new Date()).startOf("day").toDate(),
   });
   const [loading, setLoading] = useState<boolean>(false);
+
   const newBookingRequest = async () => {
     setLoading(true);
     await fetch("/api/new-booking", {
@@ -31,13 +36,26 @@ export default function NewBookingForm({
     router.refresh();
     window.scrollTo(0, 0);
   };
+
   useEffect(() => {
-    if (newBooking.company === "" || newBooking.duration === 0) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [newBooking]);
+    setNewBooking((state) => ({
+      ...state,
+      duration: moment(newBooking.moveOutAt).diff(
+        moment(newBooking.movedInAt),
+        "days"
+      ),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newBooking.moveOutAt, newBooking.movedInAt]);
+
+  useEffect(() => {
+    setNewBooking((state) => ({
+      ...state,
+      moveOutAt: moment(state.movedInAt!).add(state.duration, "days").toDate(),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newBooking.duration, newBooking.movedInAt]);
+
   return (
     <div className="border-b pb-5 border-slate-800">
       <h1 className="font-semibold text-center">Новая бронь</h1>
@@ -65,10 +83,13 @@ export default function NewBookingForm({
               duration: Number(event.target.value),
             }))
           }
+          value={newBooking.duration}
         />
       </div>
-      <div className="mt-2">
-        <label htmlFor="date">От: </label>
+      <div className="mt-2 grid grid-cols-[auto_1fr]">
+        <label htmlFor="date" className="flex items-center mr-4">
+          От:{" "}
+        </label>
         <input
           className="py-1 px-2 border mt-2"
           type="date"
@@ -80,22 +101,37 @@ export default function NewBookingForm({
               movedInAt: new Date(event.target.value),
             }))
           }
-          value={format(newBooking.movedInAt!, "YYYY-MM-DD")}
+          value={moment(newBooking.movedInAt).format("YYYY-MM-DD")}
         />
-        <p className="mt-2">
+        <label htmlFor="date" className="flex items-center mr-4">
           До:{" "}
-          {format(
-            addDay(newBooking.movedInAt!, newBooking?.duration),
-            "medium",
-            "ru"
-          )}
-        </p>
+        </label>
+        <input
+          className="py-1 px-2 border mt-2"
+          type="date"
+          name="date-to"
+          id="date-to"
+          onChange={(event) =>
+            setNewBooking((state) => ({
+              ...state,
+              moveOutAt: new Date(event.target.value),
+            }))
+          }
+          value={moment(newBooking.moveOutAt).format("YYYY-MM-DD")}
+        />
       </div>
-      <div className="mt-2 flex justify-center">
+      <div className="mt-5 flex justify-center">
         {loading ? (
           <div className="loader w-10"></div>
         ) : (
-          <Button disabled={disabled} onClick={newBookingRequest}>
+          <Button
+            disabled={
+              newBooking.company === "" ||
+              newBooking.duration === 0 ||
+              newBooking.movedInAt! > newBooking.moveOutAt!
+            }
+            onClick={newBookingRequest}
+          >
             Забронировать
           </Button>
         )}

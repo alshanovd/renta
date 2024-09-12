@@ -31,7 +31,9 @@ export default function NewFlat() {
         {loading ? (
           <div className="loader w-10"></div>
         ) : (
-          <Button onClick={(e) => addFlat(e)}>Добавить квартиру</Button>
+          <Button onClick={(e) => addFlat(e)} disabled={!title}>
+            Добавить квартиру
+          </Button>
         )}
       </div>
     </div>

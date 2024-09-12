@@ -1,6 +1,6 @@
-import { addDay, format } from "@formkit/tempo";
 import { Booking } from "@prisma/client";
-import React from "react";
+import moment from "moment";
+import "moment/locale/ru";
 
 export default function FlatStatus({
   busy,
@@ -8,13 +8,9 @@ export default function FlatStatus({
 }: Readonly<{ busy: boolean; lastBooking?: Booking }>) {
   let until = "";
   if (lastBooking) {
-    until = format(
-      addDay(lastBooking.movedInAt, lastBooking.duration),
-      "medium",
-      "ru"
-    );
-  } else {
-    until = "Неизвестно";
+    until = moment(lastBooking.movedInAt)
+      .add(lastBooking.duration, "days")
+      .format("D MMM YYYY");
   }
   return (
     <div className="text-base font-normal">

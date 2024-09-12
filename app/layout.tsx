@@ -1,13 +1,15 @@
 import FlatsProvider from "@/components/flats-context";
 import prisma from "@/prisma/prisma";
+import moment from "moment";
+import "moment/locale/ru";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { IoSettingsSharp } from "react-icons/io5";
 import "./globals.css";
-import { format } from "@formkit/tempo";
 
 const inter = Inter({ subsets: ["cyrillic"] });
+moment.locale("ru");
 
 export const metadata: Metadata = {
   title: "Рента - мониторинг квартир",
@@ -39,7 +41,8 @@ export default async function RootLayout({
               <h1 className="text-2xl font-bold">Квартиры</h1>
             </Link>
             <span className="uppercase tracking-widest font-bold">
-              {format(new Date(), "D MMMM", "ru")}
+              {/* {format(new Date(), "D MMMM", "ru")} */}
+              {moment().format("D MMMM")}
             </span>
           </header>
           <FlatsProvider props={{ flats }}>

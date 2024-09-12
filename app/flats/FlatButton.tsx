@@ -1,8 +1,7 @@
 import { days } from "@/tools/days";
-import { addDay, diffDays } from "@formkit/tempo";
 import { Booking, Flat } from "@prisma/client";
+import moment from "moment";
 import Link from "next/link";
-import React from "react";
 
 export default function FlatButton({
   flat,
@@ -10,10 +9,9 @@ export default function FlatButton({
   busy,
 }: Readonly<{ flat: Flat; lastBooking: Booking; busy: boolean }>) {
   const color = busy ? "text-green-700" : "text-red-700";
-  const daysLeft = diffDays(
-    addDay(lastBooking?.movedInAt, lastBooking?.duration + 1),
-    new Date()
-  );
+  const daysLeft = moment(lastBooking.movedInAt)
+    .add(lastBooking.duration + 1, "days")
+    .diff(moment(), "days");
   return (
     <>
       {busy ? (

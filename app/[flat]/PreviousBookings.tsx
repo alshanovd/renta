@@ -1,7 +1,8 @@
 import { Flat } from "@/models/flat";
 import { days } from "@/tools/days";
-import { addDay, format } from "@formkit/tempo";
 import { Booking } from "@prisma/client";
+import moment from "moment";
+import "moment/locale/ru";
 import { FaTrash } from "react-icons/fa";
 
 export default function PreviousBookings({
@@ -26,11 +27,9 @@ export default function PreviousBookings({
                 <li className="flex justify-between my-3" key={booking.id}>
                   <div>
                     До{" "}
-                    {format(
-                      addDay(booking.movedInAt, booking.duration),
-                      "medium",
-                      "ru"
-                    )}{" "}
+                    {moment(booking.movedInAt)
+                      .add(booking.duration, "days")
+                      .format("D MMM YYYY")}{" "}
                     - {booking.company} ({booking.duration}{" "}
                     {days(booking.duration)})
                   </div>

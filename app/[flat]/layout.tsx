@@ -1,13 +1,14 @@
 "use client";
+import Confirm from "@/components/confim";
 import { FlatsContext } from "@/components/flats-context";
 import { Booking, Flat } from "@/models/flat";
+import moment from "moment";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import CurrentBooking from "./CurrentBooking";
 import FlatStatus from "./FlatStatus";
 import PreviousBookings from "./PreviousBookings";
-import { addDay, diffDays, format } from "@formkit/tempo";
-import { useRouter } from "next/navigation";
-import Confirm from "@/components/confim";
+import "moment/locale/ru";
 
 export default function FlatLayout({
   children,
@@ -48,10 +49,9 @@ export default function FlatLayout({
     let currBusy = false;
     if (currBooking) {
       currBusy =
-        diffDays(
-          addDay(currBooking.movedInAt, currBooking.duration + 1),
-          new Date()
-        ) > 0;
+        moment(currBooking.movedInAt)
+          .add(currBooking.duration, "days")
+          .diff(moment(), "days") > 0;
     }
     setFlat(currFlat);
     setBooking(currBooking);
@@ -86,7 +86,7 @@ export default function FlatLayout({
                 <br />
                 от{" "}
                 <span className="font-bold">
-                  {format(removingBooking!.movedInAt, "medium", "ru")}
+                  {moment(removingBooking!.movedInAt).format("D MMM YYYY")}
                 </span>
                 ?
               </p>
