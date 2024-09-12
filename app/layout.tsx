@@ -41,7 +41,6 @@ export default async function RootLayout({
               <h1 className="text-2xl font-bold">Квартиры</h1>
             </Link>
             <span className="uppercase tracking-widest font-bold">
-              {/* {format(new Date(), "D MMMM", "ru")} */}
               {moment().format("D MMMM")}
             </span>
           </header>
