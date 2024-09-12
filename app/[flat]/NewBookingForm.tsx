@@ -29,6 +29,7 @@ export default function NewBookingForm({
     setShowForm(false);
     setLoading(false);
     router.refresh();
+    window.scrollTo(0, 0);
   };
   useEffect(() => {
     if (newBooking.company === "" || newBooking.duration === 0) {
