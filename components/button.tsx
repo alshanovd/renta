@@ -19,7 +19,7 @@ export default function Button({
       disabled={disabled}
       onClick={onClick}
       className={
-        "flex items-center text-slate-800 border border-slate-700  py-2 px-4 rounded-md shadow-md transition-all duration-300 " +
+        "flex items-center justify-center text-slate-800 border border-slate-700  py-2 px-4 rounded-md shadow-md transition-all duration-300 " +
         disabledClass +
         " " +
         className

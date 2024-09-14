@@ -1,13 +1,9 @@
 import Button from "@/components/button";
-import { Booking } from "@prisma/client";
+import { FrontendBooking } from "@/models/flat";
 import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FlatBookingInput from "./FlatBookingInput";
-
-interface BookingExtended extends Booking {
-  moveOutAt: Date;
-}
 
 export default function NewBookingForm({
   setShowForm,
@@ -16,12 +12,12 @@ export default function NewBookingForm({
 }) {
   const router = useRouter();
   const params = useParams();
-  const [newBooking, setNewBooking] = useState<Partial<BookingExtended>>({
+  const [newBooking, setNewBooking] = useState<Partial<FrontendBooking>>({
     duration: 0,
     flatId: Number(params.flat),
-    movedInAt: moment(new Date()).startOf("day").toDate(),
+    movedInAt: moment().startOf("day").toDate(),
     company: "",
-    moveOutAt: moment(new Date()).startOf("day").toDate(),
+    moveOutAt: moment().startOf("day").toDate(),
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -114,7 +110,7 @@ export default function NewBookingForm({
           onChange={(event) =>
             setNewBooking((state) => ({
               ...state,
-              moveOutAt: new Date(event.target.value),
+              moveOutAt: moment(event.target.value).startOf("day").toDate(),
             }))
           }
           value={moment(newBooking.moveOutAt).format("YYYY-MM-DD")}

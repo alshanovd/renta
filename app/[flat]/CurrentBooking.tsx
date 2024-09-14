@@ -1,7 +1,12 @@
+"use client";
+import Button from "@/components/button";
+import { FrontendBooking } from "@/models/flat";
 import { days } from "@/tools/days";
 import { Booking } from "@prisma/client";
-import moment from "moment";
+import moment, { duration } from "moment";
 import "moment/locale/ru";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 
 const Bold = ({ text }: { text: string }) => (
@@ -12,16 +17,36 @@ export default function CurrentBooking({
   booking,
   deleteBooking,
 }: {
-  booking: Booking;
+  booking: FrontendBooking;
   deleteBooking: (booking: Booking) => void;
 }) {
+  const router = useRouter();
+  const [moveOutAt, setMoveOutAt] = useState<Date>(booking.moveOutAt!);
+  const [loading, setLoading] = useState<boolean>(false);
   const until = moment(booking.movedInAt)
     .add(booking.duration, "days")
-    .format("D MMM YYYY");
+    .format("YYYY-MM-DD");
   const movedIn = moment(booking.movedInAt).format("D MMM YYYY");
   const freeIn = moment(booking.movedInAt)
     .add(booking.duration, "days")
     .diff(moment().startOf("day"), "days");
+
+  const updateMoveOutAtRequest = async () => {
+    setLoading(true);
+    await fetch("/api/update-booking", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: booking.id,
+        duration: moment(moveOutAt).diff(moment(booking.movedInAt), "days"),
+      }),
+    });
+    router.refresh();
+    setLoading(false);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div>
@@ -33,7 +58,30 @@ export default function CurrentBooking({
         <p className="text-right mr-4">Длительность: </p>
         <Bold text={booking.duration + " " + days(booking.duration)} />
         <p className="text-right mr-4">До:</p>
-        <Bold text={until} />
+        <input
+          type="date"
+          defaultValue={until}
+          className="border px-2 font-bold"
+          onChange={(e) =>
+            setMoveOutAt(moment(e.target.value).startOf("day").toDate())
+          }
+        />
+        {moment(booking.moveOutAt).diff(moment(moveOutAt), "days") === 0 ? (
+          ""
+        ) : (
+          <>
+            <div> </div>
+            <div className="flex justify-center">
+              {loading ? (
+                <div className="loader"></div>
+              ) : (
+                <Button onClick={() => updateMoveOutAtRequest()}>
+                  Сохранить
+                </Button>
+              )}
+            </div>
+          </>
+        )}
         <p className="text-right mr-4">Выезжают:</p>
         <Bold text={"через " + freeIn + " " + days(freeIn)} />
       </div>

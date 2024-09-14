@@ -1,7 +1,7 @@
 "use client";
 import Confirm from "@/components/confim";
 import { FlatsContext } from "@/components/flats-context";
-import { Booking, Flat } from "@/models/flat";
+import { FrontendBooking, Flat } from "@/models/flat";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import CurrentBooking from "./CurrentBooking";
 import FlatStatus from "./FlatStatus";
 import PreviousBookings from "./PreviousBookings";
 import "moment/locale/ru";
+import { Booking } from "@prisma/client";
 
 export default function FlatLayout({
   children,
@@ -18,7 +19,7 @@ export default function FlatLayout({
   const router = useRouter();
   const [flat, setFlat] = useState<Flat | undefined>();
   const [busy, setBusy] = useState<boolean>(false);
-  const [booking, setBooking] = useState<Booking | null>(null);
+  const [currBooking, setCurrBooking] = useState<FrontendBooking | null>(null);
   const [loading, setLoading] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [removingBooking, setRemovingBooking] = useState<Booking | null>(null);
@@ -45,16 +46,21 @@ export default function FlatLayout({
 
   useEffect(() => {
     const currFlat = flats.find((flat) => flat.id === Number(params.flat));
-    const currBooking = currFlat?.bookings[0] || null;
+    const booking = currFlat?.bookings[0] || null;
     let currBusy = false;
-    if (currBooking) {
+    if (booking) {
       currBusy =
-        moment(currBooking.movedInAt)
-          .add(currBooking.duration, "days")
+        moment(booking.movedInAt)
+          .add(booking.duration, "days")
           .diff(moment(), "days") >= 0;
     }
     setFlat(currFlat);
-    setBooking(currBooking);
+    setCurrBooking({
+      ...booking,
+      moveOutAt: moment(booking?.movedInAt)
+        .add(booking?.duration, "days")
+        .toDate(),
+    } as FrontendBooking);
     setBusy(currBusy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flats]);
@@ -64,8 +70,8 @@ export default function FlatLayout({
       <h1 className="mx-4 font-bold tracking-wide">{flat?.title}</h1>
       <FlatStatus busy={busy} />
       <div className="mx-4">
-        {busy && booking && (
-          <CurrentBooking deleteBooking={deleteBooking} booking={booking} />
+        {busy && currBooking && (
+          <CurrentBooking deleteBooking={deleteBooking} booking={currBooking} />
         )}
         <div>{children}</div>
         <PreviousBookings

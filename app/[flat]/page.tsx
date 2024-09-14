@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/button";
 import { useState } from "react";
-import { FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
+import { FaCalendarCheck } from "react-icons/fa";
 import NewBookingForm from "./NewBookingForm";
 
 export default function FlatPage() {
