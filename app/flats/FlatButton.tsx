@@ -11,8 +11,8 @@ export default function FlatButton({
   const color = busy ? "text-green-700" : "text-red-700";
   const daysLeft = lastBooking
     ? moment(lastBooking.movedInAt)
-        .add(lastBooking.duration + 1, "days")
-        .diff(moment(), "days")
+        .add(lastBooking.duration, "days")
+        .diff(moment().startOf("day"), "days")
     : 0;
   return (
     <>

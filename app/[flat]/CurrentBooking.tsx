@@ -21,7 +21,7 @@ export default function CurrentBooking({
   const movedIn = moment(booking.movedInAt).format("D MMM YYYY");
   const freeIn = moment(booking.movedInAt)
     .add(booking.duration, "days")
-    .diff(moment(), "days");
+    .diff(moment().startOf("day"), "days");
 
   return (
     <div>

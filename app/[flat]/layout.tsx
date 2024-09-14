@@ -51,7 +51,7 @@ export default function FlatLayout({
       currBusy =
         moment(currBooking.movedInAt)
           .add(currBooking.duration, "days")
-          .diff(moment(), "days") > 0;
+          .diff(moment(), "days") >= 0;
     }
     setFlat(currFlat);
     setBooking(currBooking);
