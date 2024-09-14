@@ -17,7 +17,7 @@ export default function FlatButton({
   return (
     <>
       {busy ? (
-        <div className={color}>
+        <div className={color + " text-nowrap"}>
           {daysLeft} {days(daysLeft)}
         </div>
       ) : (
