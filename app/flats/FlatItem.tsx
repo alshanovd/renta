@@ -1,17 +1,55 @@
 import { Flat } from "@/models/flat";
 import moment from "moment";
 import FlatButton from "./FlatButton";
-import FlatStatus from "./FlatStatus";
+import FlatTextStatus from "./FlatTextStatus";
+import { Booking } from "@prisma/client";
+
+export interface Bookings {
+  currentBooking: Booking | null;
+  nextBooking: Booking | null;
+  prevBooking: Booking | null;
+}
 
 export default function FlatItem({ flat }: { flat: Flat }) {
-  const lastBooking = flat.bookings[0];
-  let busy = false;
-  if (lastBooking) {
-    busy =
-      moment(lastBooking.movedInAt).add(lastBooking.duration, "days") >
-      moment();
+  const bookings: Bookings = {
+    currentBooking: null,
+    nextBooking: null,
+    prevBooking: null,
+  };
+  const bookingsLoop = flat.bookings;
+  //
+  for (let i = 0; i < bookingsLoop.length; i++) {
+    const booking = bookingsLoop[i];
+    const moveOutAt = moment(booking.movedInAt).add(booking.duration, "days");
+    if (
+      !bookings.currentBooking &&
+      moment()
+        .startOf("day")
+        .isBetween(booking.movedInAt, moveOutAt, "days", "[)")
+      // если бронь сегодня заканчивается, то квартира считается свободной
+      // если бронь сегодня начинается, то квартира считается занятой
+    ) {
+      bookings.currentBooking = booking;
+    }
+    if (bookings.currentBooking) {
+      bookings.nextBooking = bookingsLoop[i - 1] || null;
+      bookings.prevBooking = bookingsLoop[i + 1] || null;
+      break;
+    } else {
+      if (
+        !bookings.nextBooking &&
+        moment().isSameOrBefore(booking.movedInAt, "day")
+      ) {
+        bookings.nextBooking = booking;
+        continue;
+      }
+      if (!bookings.prevBooking && moment().isSameOrAfter(moveOutAt, "day")) {
+        bookings.prevBooking = booking;
+        continue;
+      }
+    }
   }
-  const color = busy
+  const color = bookings.currentBooking
     ? " from-green-300 to-green-200"
     : " from-red-300 to-red-200";
   return (
@@ -23,10 +61,10 @@ export default function FlatItem({ flat }: { flat: Flat }) {
     >
       <div>
         <p>{flat.title}</p>
-        <FlatStatus busy={busy} lastBooking={lastBooking} />
+        <FlatTextStatus {...bookings} />
       </div>
       <div className="flex flex-col items-end ml-2 justify-between">
-        <FlatButton flat={flat} lastBooking={lastBooking} busy={busy} />
+        <FlatButton {...bookings} flat={flat} />
       </div>
     </div>
   );

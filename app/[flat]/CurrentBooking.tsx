@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import { FrontendBooking } from "@/models/flat";
 import { days } from "@/tools/days";
 import { Booking } from "@prisma/client";
-import moment, { duration } from "moment";
+import moment from "moment";
 import "moment/locale/ru";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

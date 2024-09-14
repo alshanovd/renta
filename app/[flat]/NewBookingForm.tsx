@@ -54,6 +54,9 @@ export default function NewBookingForm({
 
   return (
     <div className="border-b pb-5 border-slate-800">
+      {/* <pre className="text-black text-base">
+        {JSON.stringify(newBooking, null, 2)}
+      </pre> */}
       <h1 className="font-semibold text-center">Новая бронь</h1>
       <div className="mt-2">
         <FlatBookingInput
@@ -94,7 +97,7 @@ export default function NewBookingForm({
           onChange={(event) =>
             setNewBooking((state) => ({
               ...state,
-              movedInAt: new Date(event.target.value),
+              movedInAt: moment(event.target.value).startOf("day").toDate(),
             }))
           }
           value={moment(newBooking.movedInAt).format("YYYY-MM-DD")}

@@ -1,28 +1,24 @@
 import { days } from "@/tools/days";
-import { Booking, Flat } from "@prisma/client";
+import { daysUntilCheckOut } from "@/tools/until";
+import { Flat } from "@prisma/client";
 import moment from "moment";
 import Link from "next/link";
+import { Bookings } from "./FlatItem";
 
 export default function FlatButton({
+  currentBooking,
+  nextBooking,
   flat,
-  lastBooking,
-  busy,
-}: Readonly<{ flat: Flat; lastBooking?: Booking; busy: boolean }>) {
-  const color = busy ? "text-green-700" : "text-red-700";
-  const daysLeft = lastBooking
-    ? moment(lastBooking.movedInAt)
-        .add(lastBooking.duration, "days")
-        .diff(moment().startOf("day"), "days")
-    : 0;
+}: Readonly<Bookings & { flat: Flat }>) {
+  const color = currentBooking ? "text-green-700" : "text-red-700";
+  const daysLeft = currentBooking
+    ? daysUntilCheckOut(currentBooking)
+    : moment(nextBooking?.movedInAt).diff(moment().startOf("day"), "days");
   return (
     <>
-      {busy ? (
-        <div className={color + " text-nowrap"}>
-          {daysLeft} {days(daysLeft)}
-        </div>
-      ) : (
-        <div className={color}> Свободна </div>
-      )}
+      <div className={color + " text-nowrap"}>
+        {daysLeft > 0 ? daysLeft + " " + days(daysLeft) : "Свободна"}
+      </div>
       <Link
         className="border py-2 px-4 w-16 rounded-md bg-gradient-to-b text-center from-slate-100 to-slate-300 shadow-md active:shadow-inner"
         href={`/${flat.id}`}
