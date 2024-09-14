@@ -7,11 +7,13 @@ export default function FlatButton({
   flat,
   lastBooking,
   busy,
-}: Readonly<{ flat: Flat; lastBooking: Booking; busy: boolean }>) {
+}: Readonly<{ flat: Flat; lastBooking?: Booking; busy: boolean }>) {
   const color = busy ? "text-green-700" : "text-red-700";
-  const daysLeft = moment(lastBooking.movedInAt)
-    .add(lastBooking.duration + 1, "days")
-    .diff(moment(), "days");
+  const daysLeft = lastBooking
+    ? moment(lastBooking.movedInAt)
+        .add(lastBooking.duration + 1, "days")
+        .diff(moment(), "days")
+    : 0;
   return (
     <>
       {busy ? (
