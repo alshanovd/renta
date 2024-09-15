@@ -1,7 +1,7 @@
 "use client";
 import Confirm from "@/components/confim";
 import { FlatsContext } from "@/components/flats-context";
-import { FrontendBooking, Flat } from "@/models/flat";
+import { FrontendBooking, Flat, FrontendFlat } from "@/models/flat";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import FlatStatus from "./FlatStatus";
 import PreviousBookings from "./PreviousBookings";
 import "moment/locale/ru";
 import { Booking } from "@prisma/client";
+import NextBooking from "./NextBooking";
 
 export default function FlatLayout({
   children,
@@ -17,9 +18,7 @@ export default function FlatLayout({
 }: Readonly<{ children: React.ReactNode; params: { flat: string } }>) {
   const flats = useContext(FlatsContext);
   const router = useRouter();
-  const [flat, setFlat] = useState<Flat | undefined>();
-  const [busy, setBusy] = useState<boolean>(false);
-  const [currBooking, setCurrBooking] = useState<FrontendBooking | null>(null);
+  const [flat, setFlat] = useState<FrontendFlat | undefined>();
   const [loading, setLoading] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [removingBooking, setRemovingBooking] = useState<Booking | null>(null);
@@ -46,39 +45,28 @@ export default function FlatLayout({
 
   useEffect(() => {
     const currFlat = flats.find((flat) => flat.id === Number(params.flat));
-    const booking = currFlat?.bookings[0] || null;
-    let currBusy = false;
-    if (booking) {
-      currBusy =
-        moment(booking.movedInAt)
-          .add(booking.duration, "days")
-          .diff(moment(), "days") >= 0;
-    }
     setFlat(currFlat);
-    setCurrBooking({
-      ...booking,
-      moveOutAt: moment(booking?.movedInAt)
-        .add(booking?.duration, "days")
-        .toDate(),
-    } as FrontendBooking);
-    setBusy(currBusy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flats]);
+  }, [flats, params.flat]);
 
   return (
     <div className="text-xl text-black">
       <h1 className="mx-4 font-bold tracking-wide">{flat?.title}</h1>
-      <FlatStatus busy={busy} />
+      <FlatStatus busy={!!flat?.currentBooking} />
       <div className="mx-4">
-        {busy && currBooking && (
-          <CurrentBooking deleteBooking={deleteBooking} booking={currBooking} />
+        {flat?.currentBooking && (
+          <CurrentBooking
+            deleteBooking={deleteBooking}
+            booking={flat.currentBooking}
+          />
         )}
-        <div>{children}</div>
-        <PreviousBookings
-          deleteBooking={deleteBooking}
-          busy={busy}
-          flat={flat}
-        />
+        {flat?.nextBooking && (
+          <NextBooking
+            deleteBooking={deleteBooking}
+            booking={flat.nextBooking}
+          />
+        )}
+        <div>{children /* NewBookingForm */}</div>
+        <PreviousBookings deleteBooking={deleteBooking} flat={flat} />
         {removing && (
           <Confirm
             confirm="Удалить"

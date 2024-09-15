@@ -86,7 +86,7 @@ export default function CurrentBooking({
         <Bold text={"через " + freeIn + " " + days(freeIn)} />
       </div>
       <div className="flex mt-2 items-center justify-end">
-        Удалить эту бронь
+        Удалить текущую бронь
         <FaTrash
           size={20}
           className="text-red-700 ml-4"

@@ -1,5 +1,4 @@
-import { Flat } from "@/models/flat";
-import { days } from "@/tools/days";
+import { FrontendFlat } from "@/models/flat";
 import { Booking } from "@prisma/client";
 import moment from "moment";
 import "moment/locale/ru";
@@ -7,31 +6,32 @@ import { FaTrash } from "react-icons/fa";
 
 export default function PreviousBookings({
   flat,
-  busy,
   deleteBooking,
 }: {
-  flat?: Flat;
-  busy: boolean;
+  flat?: FrontendFlat;
   deleteBooking: (booking: Booking) => void;
 }) {
-  const startFrom = busy ? 1 : 0;
+  let showed = (flat?.currentBooking ? 1 : 0) + (flat?.nextBooking ? 1 : 0);
 
   return (
     <div>
-      {flat?.bookings && flat?.bookings.length > startFrom ? (
+      {flat?.bookings && flat?.bookings.length > showed ? (
         <div className="mt-6">
           <h2 className="text-lg">Прошлые жильцы</h2>
           <ul className="text-base text-green-800 font-semibold">
-            {flat?.bookings.map((booking, i) =>
-              i >= startFrom ? (
+            {flat?.bookings.map((booking, i) => {
+              if (
+                flat.currentBooking === booking ||
+                flat.nextBooking === booking
+              ) {
+                return "";
+              }
+              return (
                 <li className="flex justify-between my-3" key={booking.id}>
                   <div>
-                    До{" "}
-                    {moment(booking.movedInAt)
-                      .add(booking.duration, "days")
-                      .format("D MMM YYYY")}{" "}
-                    - {booking.company} ({booking.duration}{" "}
-                    {days(booking.duration)})
+                    {booking.company}:{" "}
+                    {moment(booking.movedInAt).format("D MMM")} -{" "}
+                    {moment(booking.moveOutAt).format("D MMM")}
                   </div>
                   <FaTrash
                     onClick={() => deleteBooking(booking)}
@@ -39,10 +39,8 @@ export default function PreviousBookings({
                     size={20}
                   />
                 </li>
-              ) : (
-                ""
-              )
-            )}
+              );
+            })}
           </ul>
         </div>
       ) : (

@@ -1,13 +1,13 @@
+import { FrontendFlat } from "@/models/flat";
 import { until } from "@/tools/until";
 import moment from "moment";
 import "moment/locale/ru";
-import { Bookings } from "./FlatItem";
 
 export default function FlatTextStatus({
   currentBooking,
   nextBooking,
   prevBooking,
-}: Readonly<Bookings>) {
+}: Readonly<FrontendFlat>) {
   return (
     <div className="text-base font-normal">
       {currentBooking ? (
@@ -20,7 +20,7 @@ export default function FlatTextStatus({
           {nextBooking && (
             <p>Заезд с {moment(nextBooking.movedInAt).format("D MMM")}</p>
           )}
-          {prevBooking && <p>Выезд {until(prevBooking)}</p>}
+          {prevBooking && <p>Выехали {until(prevBooking)}</p>}
           {!nextBooking && !prevBooking && <p>Нет бронирований</p>}
         </>
       )}

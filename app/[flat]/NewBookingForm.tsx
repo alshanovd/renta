@@ -54,9 +54,6 @@ export default function NewBookingForm({
 
   return (
     <div className="border-b pb-5 border-slate-800">
-      {/* <pre className="text-black text-base">
-        {JSON.stringify(newBooking, null, 2)}
-      </pre> */}
       <h1 className="font-semibold text-center">Новая бронь</h1>
       <div className="mt-2">
         <FlatBookingInput
