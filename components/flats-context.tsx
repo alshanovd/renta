@@ -3,7 +3,7 @@ import { Flat, FrontendFlat } from "@/models/flat";
 import moment from "moment";
 import { createContext } from "react";
 
-export const FlatsContext = createContext<Flat[]>([]);
+export const FlatsContext = createContext<FrontendFlat[]>([]);
 
 export default function FlatsProvider({
   children,

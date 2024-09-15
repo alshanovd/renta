@@ -48,7 +48,7 @@ export default async function RootLayout({
             <div>{children}</div>
           </FlatsProvider>
           <footer className="bg-slate-700 text-slate-200 flex justify-end py-2 px-2">
-            <Link href="settings">
+            <Link href="/settings">
               <IoSettingsSharp size="30px" />
             </Link>
           </footer>

@@ -34,7 +34,7 @@ export default function CurrentBooking({
   const updateMoveOutAtRequest = async () => {
     setLoading(true);
     await fetch("/api/update-booking", {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

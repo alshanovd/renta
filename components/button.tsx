@@ -5,11 +5,13 @@ export default function Button({
   children,
   disabled,
   className,
+  type,
 }: {
-  onClick: (e: SyntheticEvent) => void;
+  onClick?: (e: SyntheticEvent) => void;
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
+  type?: "button" | "submit" | "reset";
 }) {
   const disabledClass = disabled
     ? "opacity-50 cursor-not-allowed bg-slate-200"
@@ -17,7 +19,8 @@ export default function Button({
   return (
     <button
       disabled={disabled}
-      onClick={onClick}
+      onClick={onClick ?? (() => {})}
+      type={type || "button"}
       className={
         "flex items-center justify-center text-slate-800 border border-slate-700  py-2 px-4 rounded-md shadow-md transition-all duration-300 " +
         disabledClass +

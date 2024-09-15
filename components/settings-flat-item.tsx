@@ -4,37 +4,24 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "./button";
 import Confirm from "./confim";
+import Link from "next/link";
+import { FrontendFlat } from "@/models/flat";
 
-export default function SettingsFlat({ flat }: { flat: Flat }) {
-  const [removing, setRemoving] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [renaming, setRenaming] = useState(false);
-  const [newTitle, setNewTitle] = useState(flat.title);
-  const router = useRouter();
+export default function SettingsFlatItem({ flat }: { flat: FrontendFlat }) {
+  // const [removing, setRemoving] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
-  const removeFlat = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    await fetch("/api/delete-flat", {
-      method: "DELETE",
-      body: JSON.stringify({ flatId: flat.id }),
-    });
-    setLoading(false);
-    setRemoving(false);
-    router.refresh();
-  };
-
-  const renameFlatRequest = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    await fetch("/api/rename-flat", {
-      method: "PUT",
-      body: JSON.stringify({ id: flat.id, title: newTitle }),
-    });
-    setLoading(false);
-    setRenaming(false);
-    router.refresh();
-  };
+  // const renameFlatRequest = async (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   await fetch("/api/rename-flat", {
+  //     method: "PUT",
+  //     body: JSON.stringify({ id: flat.id, title: newTitle }),
+  //   });
+  //   setLoading(false);
+  //   setRenaming(false);
+  //   router.refresh();
+  // };
 
   return (
     <div
@@ -43,12 +30,14 @@ export default function SettingsFlat({ flat }: { flat: Flat }) {
     >
       <span>{flat.title}</span>
       <div className="flex">
-        <Button onClick={() => setRemoving(true)}>Удалить</Button>
-        <Button className="ml-4" onClick={() => setRenaming(true)}>
-          Имя
-        </Button>
+        {/* <Button onClick={() => setRemoving(true)}>Удалить</Button> */}
+        <Link href={`/settings/${flat.id}`}>
+          <Button className="ml-4" onClick={() => 0}>
+            Настроить
+          </Button>
+        </Link>
       </div>
-      {removing && (
+      {/* {removing && (
         <Confirm
           confirm="Удалить"
           onCancel={() => setRemoving(false)}
@@ -61,8 +50,8 @@ export default function SettingsFlat({ flat }: { flat: Flat }) {
             {loading && <div className="loader w-10 mt-2"></div>}
           </div>
         </Confirm>
-      )}
-      {renaming && (
+      )} */}
+      {/* {renaming && (
         <Confirm
           confirm="Переименовать"
           onCancel={() => setRenaming(false)}
@@ -78,7 +67,7 @@ export default function SettingsFlat({ flat }: { flat: Flat }) {
             {loading && <div className="loader w-10 mt-2"></div>}
           </div>
         </Confirm>
-      )}
+      )} */}
     </div>
   );
 }
