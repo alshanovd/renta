@@ -28,10 +28,10 @@ export default function NextBooking({
       <p className="font-bold text-center">{booking.company}</p>
 
       <div className="flex mt-2 items-center justify-end">
-        Удалить следующую бронь
+        Удалить бронь
         <FaTrash
           size={20}
-          className="text-red-700 ml-4"
+          className="text-red-700 ml-2"
           onClick={() => deleteBooking(booking)}
         />
       </div>
