@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { IoSettingsSharp } from "react-icons/io5";
 import "./globals.css";
+import { FaDollarSign } from "react-icons/fa6";
 
 const inter = Inter({ subsets: ["cyrillic"] });
 moment.locale("ru");
@@ -47,7 +48,10 @@ export default async function RootLayout({
           <FlatsProvider props={{ flats }}>
             <div>{children}</div>
           </FlatsProvider>
-          <footer className="bg-slate-700 text-slate-200 flex justify-end py-2 px-2">
+          <footer className="bg-slate-700 text-slate-200 flex justify-between py-2 px-2">
+            <Link href="/payments">
+              <FaDollarSign size="30px" />
+            </Link>
             <Link href="/settings">
               <IoSettingsSharp size="30px" />
             </Link>

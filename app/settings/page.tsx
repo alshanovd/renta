@@ -15,7 +15,6 @@ export default function SettingsPage() {
     <div className="text-slate-800 mx-4">
       <h1 className="text-xl mb-4 text-center font-bold">Настройки</h1>
       <div className="flex justify-center text-slate-900 my-4">
-        {/* <Button onClick={() => router.replace("/new-flat")}> */}
         <Button onClick={() => router.replace("/settings/0")}>
           Новая квартира
         </Button>
