@@ -1,23 +1,11 @@
-export interface Flat {
-  id: number;
-  title: string;
-  bookings: Booking[];
-}
+import { Booking, Flat, LandlordPayments } from "@prisma/client";
 
 export interface FrontendFlat extends Flat {
   currentBooking?: FrontendBooking;
   nextBooking?: FrontendBooking;
   prevBooking?: FrontendBooking;
   bookings: FrontendBooking[];
-}
-
-export interface Booking {
-  id: number;
-  flatId: number;
-  movedInAt: Date;
-  duration: number;
-  company: string;
-  createdAt: Date;
+  llPayments: LandlordPayments[];
 }
 
 export interface FrontendBooking extends Booking {

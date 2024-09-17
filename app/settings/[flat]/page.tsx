@@ -110,17 +110,6 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
             className="border py-2 px-4 w-full"
           />
         </div>
-        <div className="mt-4">
-          <label htmlFor="landlord">Арендодатель</label>
-          <input
-            type="text"
-            name="landlord"
-            id="landlord"
-            value={formik.values.landlord!}
-            onChange={formik.handleChange}
-            className="border py-2 px-4 w-full"
-          />
-        </div>
         <div className="mt-4 grid grid-cols-2 gap-y-2 gap-x-3">
           <Label htmlFor="paymentAmount">Сумма аренды</Label>
           <input

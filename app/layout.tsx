@@ -30,6 +30,10 @@ export default async function RootLayout({
         orderBy: { movedInAt: "desc" },
         take: 10,
       },
+      llPayments: {
+        orderBy: { paidAt: "desc" },
+        take: 10,
+      },
     },
     orderBy: { id: "desc" },
   });

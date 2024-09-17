@@ -21,7 +21,6 @@ model Booking {
 model Flat {
   id            Int                @id @default(autoincrement())
   title         String
-  landlord      String?            @default("")
   paymentDay    Int?               @default(1)
   paymentAmount Int?               @default(0)
   bookings      Booking[]
@@ -29,9 +28,9 @@ model Flat {
 }
 
 model LandlordPayments {
-  id     Int      @id @default(autoincrement())
-  flat   Flat     @relation(fields: [flatId], references: [id])
-  flatId Int      @map(name: "flat_id")
-  amount Int
-  paidAt DateTime @map(name: "paid_at")
+  id     Int       @id @default(autoincrement())
+  flat   Flat      @relation(fields: [flatId], references: [id])
+  flatId Int       @map(name: "flat_id")
+  amount Int       @default(0)
+  paidAt DateTime? @default(now()) @map(name: "paid_at")
 }
