@@ -1,11 +1,13 @@
-import { Booking, Flat, LandlordPayments } from "@prisma/client";
+import { Booking, Flat, LandlordPayment } from "@prisma/client";
 
 export interface FrontendFlat extends Flat {
   currentBooking?: FrontendBooking;
   nextBooking?: FrontendBooking;
   prevBooking?: FrontendBooking;
   bookings: FrontendBooking[];
-  llPayments: LandlordPayments[];
+  llPayments: LandlordPayment[];
+  isPaid?: boolean;
+  lastPayment?: LandlordPayment;
 }
 
 export interface FrontendBooking extends Booking {

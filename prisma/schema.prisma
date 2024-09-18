@@ -24,10 +24,10 @@ model Flat {
   paymentDay    Int?               @default(1)
   paymentAmount Int?               @default(0)
   bookings      Booking[]
-  llPayments    LandlordPayments[]
+  llPayments    LandlordPayment[]
 }
 
-model LandlordPayments {
+model LandlordPayment {
   id     Int       @id @default(autoincrement())
   flat   Flat      @relation(fields: [flatId], references: [id])
   flatId Int       @map(name: "flat_id")

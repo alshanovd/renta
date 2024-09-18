@@ -13,6 +13,18 @@ export default function FlatsProvider({
   props: { flats: FrontendFlat[] };
 }) {
   props.flats.map((flat) => {
+    // isPaid
+    const payments = flat.llPayments;
+    if (payments.length > 0) {
+      flat.isPaid =
+        payments
+          .filter((p) => moment(p.paidAt).month() === moment().month())
+          .map((payment) => payment.amount)
+          .reduce((acc, curr) => acc + curr, 0) === (flat.paymentAmount || 0);
+      flat.lastPayment = payments[payments.length - 1];
+    }
+
+    // currentBooking, nextBooking, prevBooking
     const bookingsLoop = flat.bookings;
     for (let i = 0; i < bookingsLoop.length; i++) {
       const booking = bookingsLoop[i];
@@ -44,6 +56,8 @@ export default function FlatsProvider({
       }
     }
   });
+
+  // сортировка квартир по дате окончания текущей брони
   const flatsSorted = props.flats.sort((a, b) => {
     if (!a?.currentBooking && !b?.currentBooking) {
       if (!a?.nextBooking && b?.nextBooking) {

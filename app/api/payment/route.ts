@@ -12,7 +12,7 @@ export async function DELETE(req: Request) {
 async function createPayment(req: Request) {
   try {
     const { amount, flatId } = await req.json();
-    const payment = await prisma.landlordPayments.create({
+    const payment = await prisma.landlordPayment.create({
       data: { amount, paidAt: new Date(), flatId },
     });
     return NextResponse.json(payment, { status: 201 });
@@ -24,7 +24,7 @@ async function createPayment(req: Request) {
 async function deletePayment(req: Request) {
   try {
     const { id } = await req.json();
-    await prisma.landlordPayments.delete({
+    await prisma.landlordPayment.delete({
       where: { id },
     });
     return NextResponse.json(204);
