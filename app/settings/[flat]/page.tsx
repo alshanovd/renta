@@ -41,7 +41,6 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
     ({
       id: 0,
       title: "",
-      landlord: "",
       paymentAmount: 0,
       paymentDay: 0,
     } as Flat);
@@ -67,12 +66,11 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
       ...(flat as Flat),
     },
     validate,
-    onSubmit: async ({ id, title, landlord, paymentAmount, paymentDay }) => {
+    onSubmit: async ({ id, title, paymentAmount, paymentDay }) => {
       setLoading(true);
       const body = JSON.stringify({
         id,
         title,
-        landlord,
         paymentAmount: Number(paymentAmount),
         paymentDay: Number(paymentDay),
       });

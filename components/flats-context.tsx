@@ -1,5 +1,5 @@
 "use client";
-import { Flat, FrontendFlat } from "@/models/flat";
+import { FrontendFlat } from "@/models/flat";
 import moment from "moment";
 import { createContext } from "react";
 

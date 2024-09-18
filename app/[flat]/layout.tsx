@@ -1,16 +1,16 @@
 "use client";
 import Confirm from "@/components/confim";
 import { FlatsContext } from "@/components/flats-context";
-import { FrontendBooking, Flat, FrontendFlat } from "@/models/flat";
+import { FrontendFlat } from "@/models/flat";
+import { Booking } from "@prisma/client";
 import moment from "moment";
+import "moment/locale/ru";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import CurrentBooking from "./CurrentBooking";
 import FlatStatus from "./FlatStatus";
-import PreviousBookings from "./PreviousBookings";
-import "moment/locale/ru";
-import { Booking } from "@prisma/client";
 import NextBooking from "./NextBooking";
+import PreviousBookings from "./PreviousBookings";
 
 export default function FlatLayout({
   children,
