@@ -1,11 +1,12 @@
 "use client";
 import Confirm from "@/components/confim";
 import { FlatsContext } from "@/components/flats-context";
-import { Flat, LandlordPayment } from "@prisma/client";
+import { FrontendFlat } from "@/models/flat";
+import { Flat } from "@prisma/client";
 import moment from "moment";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
 import "moment/locale/ru";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 
 const PaymentAmount = ({ amount }: { amount: number }) => (
   <span className="font-semibold">
@@ -18,11 +19,36 @@ export default function PaymentsPage() {
   const router = useRouter();
   const [flatPayment, setFlatPayment] = useState<Partial<Flat> | null>(null);
   const [loading, setLoading] = useState(false);
-  const sorting = (a: Flat, b: Flat) => {
-    return b.paymentDay! - a?.paymentDay!;
-  };
+  const unpaidFlats = flats
+    .filter((flat) => !flat.isPaid)
+    .sort((a, b) => {
+      return a.paymentDay! - b.paymentDay!;
+    });
+  const paidFlats = flats
+    .filter((flat) => flat.isPaid)
+    .sort((a, b) => {
+      return a.paymentDay! - b.paymentDay!;
+    });
+  const sortedFlats = [...unpaidFlats, ...paidFlats];
   const filtering = (a: Flat) => {
     return a.paymentDay !== 0;
+  };
+  const getColor = (flat: FrontendFlat, type: "bg" | "text") => {
+    const strength = type === "bg" ? 200 : 800;
+    const today = moment().date();
+    let color = "";
+    if (flat.isPaid) {
+      color = "-green-";
+    } else {
+      if (today === flat.paymentDay! || today === flat.paymentDay! - 1) {
+        color = "-yellow-";
+      } else if (today < flat.paymentDay!) {
+        color = "-blue-";
+      } else if (today > flat.paymentDay!) {
+        color = "-red-";
+      }
+    }
+    return type + color + strength;
   };
   const makePayment = async () => {
     setLoading(true);
@@ -44,63 +70,54 @@ export default function PaymentsPage() {
   return (
     <div className="text-stone-900 text-xl">
       <div className="space-y-2 mx-2">
-        {flats
-          .sort(sorting)
-          .filter(filtering)
-          .map((flat) => (
-            <div
-              key={flat.id}
-              className={
-                "border px-4 py-2 border-stone-500 flex justify-between " +
-                (flat.isPaid ? "bg-green-200" : "bg-red-200")
-              }
-            >
-              <div>
-                <p>{flat.title} </p>
-                {flat.isPaid ? (
-                  <div>
-                    <p className="text-green-800">
-                      Оплачено{" "}
-                      {flat.llPayments.map((payment) => (
-                        <span key={payment.id}>
-                          <PaymentAmount
-                            key={payment.id}
-                            amount={payment.amount}
-                          />{" "}
-                          -{" "}
-                          <span>{moment(payment.paidAt).format("D MMM")}</span>
-                        </span>
-                      ))}
-                    </p>
-                    <p className="text-base">
-                      Следующий платеж:{" "}
-                      {moment(flat.lastPayment?.paidAt)
-                        .add(1, "month")
-                        .date(flat.paymentDay!)
-                        .format("D MMMM")}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-red-800">
-                    Платеж {moment().date(flat.paymentDay!).format("D MMM")} -{" "}
-                    <PaymentAmount amount={flat.paymentAmount || 0} />
-                  </div>
-                )}
-              </div>
+        {sortedFlats.filter(filtering).map((flat) => (
+          <div
+            key={flat.id}
+            className={
+              "border px-4 py-2 border-stone-500 flex justify-between " +
+              getColor(flat, "bg")
+            }
+          >
+            <div>
+              <p>{flat.title}</p>
               {flat.isPaid ? (
-                <button>Удалить платеж</button>
+                <div>
+                  <p className={getColor(flat, "text")}>
+                    Оплачено{" "}
+                    <PaymentAmount amount={flat.lastPayment?.amount!} /> -{" "}
+                    <span>
+                      {moment(flat.lastPayment!.paidAt).format("D MMM")}
+                    </span>
+                  </p>
+                  <p className="text-base">
+                    Следующий платеж:{" "}
+                    {moment(flat.lastPayment?.paidAt)
+                      .add(1, "month")
+                      .date(flat.paymentDay!)
+                      .format("D MMMM")}
+                  </p>
+                </div>
               ) : (
-                <button
-                  onClick={() => {
-                    const { id, title, paymentAmount } = flat;
-                    setFlatPayment({ id, title, paymentAmount });
-                  }}
-                >
-                  Оплатить
-                </button>
+                <div className={getColor(flat, "text")}>
+                  Платеж {moment().date(flat.paymentDay!).format("D MMM")} -{" "}
+                  <PaymentAmount amount={flat.paymentAmount || 0} />
+                </div>
               )}
             </div>
-          ))}
+            {flat.isPaid ? (
+              <button>Удалить платеж</button>
+            ) : (
+              <button
+                onClick={() => {
+                  const { id, title, paymentAmount } = flat;
+                  setFlatPayment({ id, title, paymentAmount });
+                }}
+              >
+                Оплатить
+              </button>
+            )}
+          </div>
+        ))}
       </div>
       {flatPayment && (
         <Confirm

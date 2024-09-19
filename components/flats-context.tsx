@@ -20,7 +20,7 @@ export default function FlatsProvider({
         payments
           .filter((p) => moment(p.paidAt).month() === moment().month())
           .map((payment) => payment.amount)
-          .reduce((acc, curr) => acc + curr, 0) === (flat.paymentAmount || 0);
+          .reduce((acc, curr) => acc + curr, 0) >= (flat.paymentAmount || 0);
       flat.lastPayment = payments[payments.length - 1];
     }
 
