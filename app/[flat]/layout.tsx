@@ -11,6 +11,7 @@ import CurrentBooking from "./CurrentBooking";
 import FlatStatus from "./FlatStatus";
 import NextBooking from "./NextBooking";
 import PreviousBookings from "./PreviousBookings";
+import Button from "@/components/button";
 
 export default function FlatLayout({
   children,
@@ -50,7 +51,10 @@ export default function FlatLayout({
 
   return (
     <div className="text-xl text-black">
-      <h1 className="mx-4 font-bold tracking-wide">{flat?.title}</h1>
+      <div className="mx-4 pb-2 border-b">
+        <Button onClick={() => router.back()}>← Назад</Button>
+      </div>
+      <h1 className="my-2 mx-4 font-bold tracking-wide">{flat?.title}</h1>
       <FlatStatus busy={!!flat?.currentBooking} />
       <div className="mx-4">
         {flat?.currentBooking && (

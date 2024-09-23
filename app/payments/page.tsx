@@ -53,15 +53,24 @@ export default function PaymentsPage() {
   const sortedFlats = [...unpaidFlats, ...paidFlats];
   const getTitle = () => {
     const today = moment().date();
-    const { paymentDay } = sortedFlats[0];
-    if (moment().date() > paymentDay!) {
+    const allPaid = unpaidFlats.length === 0;
+    const paymentDay = sortedFlats[0].paymentDay!;
+    if (!allPaid && moment().date() > paymentDay) {
       return <TopNotification text="Есть платежи" type="alert" />;
     }
-    const isSoon = today === paymentDay! || today === paymentDay! - 1;
-    const paymentText = moment()
-      .date(paymentDay!)
-      .calendar()
-      .replace(/\,.+/, "");
+    const isSoon = today === paymentDay || today === paymentDay - 1;
+    const paymentTextFn = (): string => {
+      if (allPaid) {
+        return moment()
+          .date(paymentDay)
+          .add(1, "month")
+          .calendar()
+          .replace(/\,.+/, "");
+      }
+
+      return moment().date(paymentDay).calendar().replace(/\,.+/, "");
+    };
+    const paymentText = paymentTextFn();
     if (isSoon) {
       return <TopNotification text={"Платеж " + paymentText} type="warn" />;
     }

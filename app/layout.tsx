@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Приложение для отслеживания состояния квартир в п. Новая Чара",
 };
 
-export const dynamic = "force-dynamic";
+export const dynamic = "auto";
 
 export default async function RootLayout({
   children,
@@ -39,7 +39,7 @@ export default async function RootLayout({
   });
   return (
     <html lang="en">
-      <body className={inter.className + " bg-white"}>
+      <body className={inter.className + " bg-slate-700"}>
         <div className="grid grid-rows-[1fr_auto] gap-3 bg-gray-100 min-h-screen pt-[75px]">
           <header className="flex z-10 items-center fixed top-0 w-full shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
             <Link href="/">
@@ -52,7 +52,7 @@ export default async function RootLayout({
           <FlatsProvider props={{ flats }}>
             <div>{children}</div>
           </FlatsProvider>
-          <footer className="bg-slate-700 text-slate-200 flex justify-between py-2 px-2">
+          <footer className="bg-slate-700 text-slate-200 flex justify-between py-2 pt-4 pb-8 px-6">
             <Link href="/payments">
               <FaDollarSign size="30px" />
             </Link>

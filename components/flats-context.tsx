@@ -37,19 +37,21 @@ export default function FlatsProvider({
         moment()
           .startOf("day")
           .isBetween(booking.movedInAt, booking.moveOutAt, "days", "[)")
-        // если бронь сегодня заканчивается, то квартира считается свободной
         // если бронь сегодня начинается, то квартира считается занятой
+        // если бронь сегодня заканчивается, то квартира считается свободной
       ) {
         flat.currentBooking = booking;
       }
       if (
         !flat.nextBooking &&
-        moment().isSameOrBefore(booking.movedInAt, "day")
+        flat.currentBooking !== booking && // не текущая бронь
+        moment().startOf("day").isSameOrBefore(booking.movedInAt, "day") // следующая бронь начинается сегодня или позже, moment(сегодня) <- isSameOrBefore(день заезда)
       ) {
         flat.nextBooking = booking;
       }
       if (
         !flat.prevBooking &&
+        flat.currentBooking !== booking && // не текущая бронь
         moment().isSameOrAfter(booking.moveOutAt, "day")
       ) {
         flat.prevBooking = booking;

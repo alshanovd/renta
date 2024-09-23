@@ -152,7 +152,9 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
           onConfirm={(e) => removeFlat(e)}
         >
           {cannotRemove ? (
-            <p>Квартира не удалена так как в ней есть бронирования</p>
+            <p>
+              Квартира не удалена так как в ней есть бронирования или платежи
+            </p>
           ) : (
             <div className="flex flex-col items-center">
               <p>
@@ -166,8 +168,11 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
       {afterSave && (
         <Confirm
           confirm="В список"
-          cancel="Остаться"
-          onCancel={() => setAfterSave(false)}
+          cancel="Добавить еще одну"
+          onCancel={() => {
+            setAfterSave(false);
+            formik.resetForm();
+          }}
           onConfirm={() => router.push("/settings")}
         >
           <p>Квартира сохранена</p>
