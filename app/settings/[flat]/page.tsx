@@ -130,7 +130,7 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
           />
         </div>
         <div className="flex justify-center mt-4">
-          {pending ? (
+          {loading ? (
             <div className="loader w-10"></div>
           ) : (
             <Button type="submit" disabled={!!formik.errors.title}>
