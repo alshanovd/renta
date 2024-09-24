@@ -10,7 +10,7 @@ export default function Confirm({
   loading,
 }: {
   onConfirm: (e: SyntheticEvent) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   confirm: string;
   cancel?: string;
   children: React.ReactNode;
@@ -26,12 +26,16 @@ export default function Confirm({
           </div>
         ) : (
           <div className="flex justify-center mt-4">
-            <Button className="from-white to-slate-100" onClick={onCancel}>
-              {cancel ?? "Отмена"}
-            </Button>
-            <Button onClick={onConfirm} className="ml-4 to-red-300">
-              {confirm}
-            </Button>
+            {cancel && (
+              <Button className="from-white to-slate-100" onClick={onCancel}>
+                {cancel ?? "Отмена"}
+              </Button>
+            )}
+            {confirm && (
+              <Button onClick={onConfirm} className="ml-4 to-red-300">
+                {confirm}
+              </Button>
+            )}
           </div>
         )}
       </div>

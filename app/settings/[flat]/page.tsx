@@ -98,6 +98,7 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
       </h1>
       <form className="mt-4" onSubmit={formik.handleSubmit}>
         <div className="mt-4">
+          <input type="hidden" name="id" value={formik.values.id} />
           <label htmlFor="title">Название/Адрес</label>
           <input
             type="text"
@@ -129,7 +130,7 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
           />
         </div>
         <div className="flex justify-center mt-4">
-          {loading ? (
+          {pending ? (
             <div className="loader w-10"></div>
           ) : (
             <Button type="submit" disabled={!!formik.errors.title}>
@@ -138,6 +139,7 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
           )}
         </div>
       </form>
+      <pre className="text-black">{JSON.stringify(flat, null, 2)}</pre>
       {flat.id !== 0 && (
         <div className="mt-10 flex justify-center">
           <Button onClick={() => setRemoving(true)}>
@@ -168,11 +170,8 @@ export default function RenameFlat({ params }: { params: { flat: string } }) {
       {afterSave && (
         <Confirm
           confirm="В список"
-          cancel="Добавить еще одну"
-          onCancel={() => {
-            setAfterSave(false);
-            formik.resetForm();
-          }}
+          cancel="Отмена"
+          onCancel={() => setAfterSave(false)}
           onConfirm={() => router.push("/settings")}
         >
           <p>Квартира сохранена</p>
