@@ -1,9 +1,7 @@
-"use client";
-import { FrontendFlat } from "@/models/flat";
-import Link from "next/link";
-import Button from "./button";
+import { Flat } from "@prisma/client";
+import ButtonLink from "./button-link";
 
-export default function SettingsFlatItem({ flat }: { flat: FrontendFlat }) {
+export default function SettingsFlatItem({ flat }: { flat: Flat }) {
   return (
     <div
       className="border my-2 flex justify-between items-center text-base pl-2 py-1 mx-1"
@@ -11,11 +9,7 @@ export default function SettingsFlatItem({ flat }: { flat: FrontendFlat }) {
     >
       <span>{flat.title}</span>
       <div className="flex">
-        <Link href={`/settings/${flat.id}`}>
-          <Button className="ml-4" onClick={() => 0}>
-            Настроить
-          </Button>
-        </Link>
+        <ButtonLink href={`/settings/${flat.id}`}>Настроить</ButtonLink>
       </div>
     </div>
   );

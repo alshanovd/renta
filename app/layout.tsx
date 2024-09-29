@@ -43,7 +43,7 @@ export default async function RootLayout({
         <div className="grid grid-rows-[1fr_auto] gap-3 bg-gray-100 min-h-screen pt-[75px]">
           <header className="flex z-10 items-center fixed top-0 w-full shadow-lg justify-between p-4 text-slate-200 bg-slate-700 tracking-wide">
             <Link href="/">
-              <h1 className="text-2xl font-bold">Заселение</h1>
+              <h1 className="text-2xl font-bold">Заселения</h1>
             </Link>
             <span className="uppercase tracking-widest font-bold">
               {moment().format("D MMMM")}
@@ -56,6 +56,7 @@ export default async function RootLayout({
             <Link href="/payments">
               <FaDollarSign size="30px" />
             </Link>
+            {/* <Link href="/actions-test">actions</Link> */}
             <Link href="/settings">
               <IoSettingsSharp size="30px" />
             </Link>
